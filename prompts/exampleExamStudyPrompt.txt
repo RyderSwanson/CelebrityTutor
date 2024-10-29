@@ -1,0 +1,365 @@
+You are an expert in the following field, given the following practice exam and solution, write a lengthy, detailed explanation of all topics covered:
+
+
+
+QUESTION 1 [10pt]
+
+Consider a convolution layer which is configured with 1 input channel, 2 output channels and d by d filter size. Suppose a 50 by 50 image was passed through this layer, which produces 2 feature maps of size 44 by 44. How many learnable parameters does this layer have? Explain.
+
+QUESTION 2 [10pts]
+
+What is the computational complexity of forwarding an image of size (W, H) through a convolution layer with M filters of size (d, d)? Explain.
+
+QUESTION 3 (10pts)
+
+Suppose a learned perceptron sign(w⊤x+b) predicts positive for a set of data points {x1,x2,…,xn}.
+
+    Can we find x=∑ni=1αi⋅xi where αi∈(0,1) and ∑ni=1αi=1 such that sign(w⊤x+b) predicts negative? (5pts)
+
+    Suppose the current perceptron correctly predicts x1, x2 as negatives. Given an opportunity to collect more negative data points to improve the perceptron, should we collect them on the line segment between x1 and x2? (5pts)
+
+QUESTION 4 (10pts)
+
+Suppose we know that for any input x, the true conditional probability p(c=1∣x)≤1/k where k≥2 for a binary classification task.
+
+    Prove that the best error rate is always smaller than maxxp(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√. (5pts)
+
+    For k=25, can the best error rate be larger than 20%? Explain. (5pts)
+
+QUESTION 5 [10pt]
+
+Which of the below functions can be used as activation for the final layer of a neural network in a classification task?
+
+    ReLU
+    sigmoid
+    tanh
+    softplus
+
+QUESTION 6 [10pts]
+
+Recall that the ReLU activation, ReLU(x)=max(0,x) returns x if it is positive and returns zero otherwise.
+
+Using only the max, min in addition to addition, subtraction, and multiplication operators to design an activation function that:
+
+    Return the input if it is between -1 and 1. Otherwise, return 1 if it is positive and return -1 if it is negative. [5pts]
+
+    Return the input if it is non-negative. Otherwise, return a small fraction of the input. [5pts]
+
+QUESTION 7 [10pts]
+
+Let z=ReLU(a) and assume E[a]=0, V[a]=σ2 and the PDF of a is symmetric around its mean.
+
+1. Compute E[z2]. [5pts]
+
+2. Suppose further that a is Gaussian, compute V[z]. [5pts]
+
+QUESTION 8 [10pt]
+
+Suppose we are given two valid kernels k1(x,x′) and k2(x,x′) for SVM. This means there exists two feature functions ϕ1(x) and ϕ2(x) such that
+
+k1(x,x′)=ϕ1(x)⊤ϕ1(x′)
+
+k2(x,x′)=ϕ2(x)⊤ϕ2(x′)
+
+for any choices of (x,x′).
+
+1. Is k(x,x′)=k1(x,x′)+k2(x,x′) a valid kernel? If yes, construct ϕ(x) based on ϕ1(x) and ϕ2(x) such that k(x,x′)=ϕ(x)⊤ϕ(x′) for all choices of (x,x′). [5pts]
+
+2. Is k(x,x′)=k1(x,x′)⋅k2(x,x′) a valid kernel? If yes, construct ϕ(x) based on ϕ1(x) and ϕ2(x) such that k(x,x′)=ϕ(x)⊤ϕ(x′) for all choices of (x,x′). [5pts]
+
+QUESTION 9 [10pt]
+
+Consider the following probabilistic model:
+
+yn=(w∘z)⊤xn where z=[z1,z2,…,zd] is a vector of d independent outcomes of a coin toss experiment with bias p∈(0,1). That is, zi=1 with probability p and zi=0 with probability 1−p. Here, w′=w∘z is the result of a Hadamard product where w′i=wi⋅zi.
+
+(1) Given a particular observation vector z and a dataset (X,y), derive the linear regression loss Lz(w). Here, X=[x1,x2,…,xN] denotes a (d by N) data matrix where each column is a d-dim input and y=[y1,y2,…,yn] is a column vector containing the corresponding training outputs. [5pts]
+
+(2) Compute the average loss Lp(w)=Ez[Lz(w)] over the possible values of z. [3pts]
+
+(3) Derive the optimal w. [2pts]
+
+Intuitively, the above is linear regression with dropout: for each training sample, each feature might be independently removed with a certain probability p. Using this exercise (specifically part (2)), we will understand how dropout translate into a regularizer.
+
+QUESTION 10 [10pt]
+
+In this exercise, we will analyze the performance of ensemble in regression setting. Suppose y1(x),y2(x),…,ym(x) are m members of the ensemble committee. Let h(x) denote the (unknown) true function that we are approximating.
+
+The regression error incurred by the i-th member on input x is therefore: ϵi(x)2=(yi(x)−h(x))2.
+
+Suppose x is drawn randomly from a test distribution, the error rate of yi(x) is E[ϵi(x)2]. The averaged invidual error rate across the ensemble members is
+
+EAV=1M∑Mi=1E[ϵi(x)2].
+
+Now, let the ensemble prediction be y(x)=1M∑Mi=1yi(x). The ensemble loss is therefore:
+
+ECOM=E[(y(x)−h(x))2].
+
+1. Show that ECOM=E[(1M∑Mi=1ϵi(x))2]. (5pts)
+
+2. Suppose E[ϵi(x)]=0 and E[ϵi(x)ϵj(x)]=0 for i≠j. Show that ECOM≤(1/M)EAV. (5pts)
+
+
+solutions:
+
+Solutions to Practice Problems for Exam 2 (CPTS 437, Fall 2024).ipynb_
+
+QUESTION 1 [10pt]
+
+Consider a convolution layer which is configured with 1 input channel, 2 output channels and d by d filter size. Suppose a 50 by 50 image was passed through this layer, which produces 2 feature maps of size 44 by 44. How many learnable parameters does this layer have? Explain.
+
+SOLUTION
+
+With a N by N input and d by d filter size, the output is (N - d + 1) by (N - d + 1) per channel. We have N = 50, N - d + 1 = 44 so d = 7. Thus, each filter has 7 by 7 = 49 parameters. As there are two output channels, there must be two filters so the total number of parameters are 49 * 2 = 98.
+
+QUESTION 2 [10pts]
+
+What is the computational complexity of forwarding an image of size (W, H) through a convolution layer with M filters of size (d, d)? Explain.
+
+SOLUTION
+
+The convolution layer will create M feature maps each with size (W - d + 1) by (H - d + 1). As the cost of computing each entry of these feature maps are d * d, the total cost of computing these M feature maps is d * d * (W - d + 1) * (H - d + 1) * M.
+
+QUESTION 3 (10pts)
+
+Suppose a learned perceptron sign(w⊤x+b) predicts positive for a set of data points {x1,x2,…,xn}.
+
+    Can we find x=∑ni=1αi⋅xi where αi∈(0,1) and ∑ni=1αi=1 such that sign(w⊤x+b) predicts negative? (5pts)
+
+    Suppose the current perceptron correctly predicts x1, x2 as negatives. Given an opportunity to collect more negative data points to improve the perceptron, should we collect them on the line segment between x1 and x2? (5pts)
+
+SOLUTION
+
+1. For any choices of {αi}ni=1 such that αi∈(0,1) and ∑iαi=1,
+
+w⊤x+b=∑ni=1αi(w⊤xi)+b>∑ni=1αi(−b)+b=−b+b=0. Here, the first inequality holds because for any xi, w⊤xi+b>0 or equivalently, w⊤xi>−b. The second last equation holds since ∑ni=1αi=1.
+
+As such, no matter how we choose {αi}ni=1, the learned perceptron always predicts positive. So, the answer is NO: we cannot find {αi}ni=1 such that the learned perceptron predicts negative at x=∑ni=1αixi.
+
+2. Using the same argument as above, we can also conclude that no matter how we choose {α1,α2} such that 0≤α1,α2≤1 and α1+α2=1, the learned perceptron always predicts negative for x=α1x1+α2x2. This means the current perceptron will always predict correctly for any negative data point in the line segment connecting x1 and x2, which does not result in any perceptron updates. So, the answer is NO. We should not collect negative data points on the line segment between x1 and x2.
+
+QUESTION 4 (10pts)
+
+Suppose we know that for any input x, the true conditional probability p(c=1∣x)≤1/k where k≥2 for a binary classification task.
+
+    Prove that the best error rate is always smaller than maxxp(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√. (5pts)
+
+    For k=25, can the best error rate be larger than 20%? Explain. (5pts)
+
+SOLUTION
+
+1. The best error rate is achieved when we know p(c=1∣x) and always make the positive prediction according to whether p(c=1∣x)>p(c=0∣x) for any x.
+
+Thus, let R1≜{x∣p(c=1∣x)>p(c=0∣x)} and R0≜{x∣p(c=0∣x)≥p(c=1∣x)}. The best error rate is
+
+errbest=∫x∈R1p(c=0∣x)p(x)dx+∫x∈R0p(c=1∣x)p(x)dx. (1)
+
+Note that when x∈R1, p(c=0∣x)≤p(c=1∣x) or equivalently, p(c=0∣x)≤p(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√. (2)
+
+Using similar argument, when x∈R0, p(c=1∣x)≤p(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√. (3)
+
+Plugging (2) and (3) into (1),
+
+errbest≤∫x∈R1p(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√p(x)dx+∫x∈R0p(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√p(x)dx  =  ∫xp(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√p(x)dx≤maxxp(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√∫xp(x)dx=maxxp(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√
+
+where the last equality holds because ∫xp(x)dx=1 -- law of total probability.
+
+2. Now, using the result of part 1 and note that p(c=0∣x)=1−p(c=1∣x), errbest≤maxxp(c=0∣x)p(c=1∣x)−−−−−−−−−−−−−−−−−−√=maxx(1−p(c=1∣x))p(c=1∣x)−−−−−−−−−−−−−−−−−−−−−−−√≤(1/k)(1−1/k)−−−−−−−−−−−−√=k−1−−−−√/k<k−−√/k=1/k−−√.
+
+Thus, for k=25, we know that the best error rate must be no more than 1/25−−√=1/5=20%. So, the answer is No. The best error rate cannot be larger than 20%.
+
+QUESTION 5 [10pt]
+
+Which of the below functions can be used as activation for the final layer of a neural network in a classification task?
+
+    ReLU
+    sigmoid
+    tanh
+    softplus
+
+SOLUTION
+
+Sigmoid and tanh can both be used for classification between their values have an upper and lower bound (sigmoid is [0, 1], tanh is [-1, 1]). In these cases, a value that is less than or equal to the midpoint can be labeled as negative, otherwise positive. ReLU and softplus cannot be used for the last layer of a classification network because it generates a numeric value in the range [0,∞].
+
+QUESTION 6 [10pts]
+
+Recall that the ReLU activation, ReLU(x)=max(0,x) returns x if it is positive and returns zero otherwise.
+
+Using only the max, min in addition to addition, subtraction, and multiplication operators to design an activation function that:
+
+    Return the input if it is between -1 and 1. Otherwise, return 1 if it is positive and return -1 if it is negative. [5pts]
+
+    Return the input if it is non-negative. Otherwise, return a small fraction of the input. [5pts]
+
+SOLUTION
+
+    h(x)=max(−1,min(1,x)) -- this is also known as the hard Tanh activation.
+    h(x)=max(0,x)+α⋅min(0,x) -- this is also known as the Leaky ReLU activation.
+
+When x is negative, it will return α⋅x and the scale parameter α decides how much of the input x that is allowed to pass through the activation.
+
+QUESTION 7 [10pts]
+
+Let z=ReLU(a) and assume E[a]=0, V[a]=σ2 and the PDF of a is symmetric around its mean.
+
+1. Compute E[z2]. [5pts]
+
+2. Suppose further that a is Gaussian, compute V[z]. [5pts]
+
+SOLUTION
+
+1. E[z2]=∫∞−∞max2(a,0)p(a)da=∫∞0a2p(a)da=12∫∞−∞a2p(a)da due to the symmetry of a's PDF. This means
+
+E[z2]=12∫∞−∞a2p(a)da=12∫∞−∞(a−E[a])2p(a)da=12V[a]=σ2/2 by definition.
+
+2. To compute V[z], note that V[z]=E[z2]−E2[z]. Thus, we need to compute E[z2] and E[z]. We already know E[z2]=σ2/2.
+
+To compute E[z], note that:
+
+E[z]=∫∞−∞max(a,0)p(a)da=∫∞0ap(a)da.
+
+Plugging in the PDF of a, we have:
+
+E[z]=∫∞0aσ12π−−√exp(−12a2σ2)da=∫∞0σaσ12π−−√exp(−12a2σ2)d(aσ)=∫∞0σ⋅u⋅12π−−√exp(−12u2)du=σ2π−−√∫∞0uexp(−12u2)du where in the last two steps we use u=a/σ. (1)
+
+The integrand in the last equation can then be evaluated by recognizing that ud(u)=−d(−12u2),
+
+∫∞0uexp(−12u2)du=−∫∞0exp(−12u2)d(−12u2)=∫0∞exp(−12u2)d(−12u2)=∫0−∞exp(v)dv=exp(0)−exp(−∞)=1−0=1 where we use v=−12u2. (2)
+
+Plugging (2) into (1), we have E[z]=σ/2π−−√.
+
+Thus, V[z]=E[z2]−E2[z]=σ2/2−σ2/(2π)=12⋅σ2⋅(1−1/π).
+
+QUESTION 8 [10pt]
+
+Suppose we are given two valid kernels k1(x,x′) and k2(x,x′) for SVM. This means there exists two feature functions ϕ1(x) and ϕ2(x) such that
+
+k1(x,x′)=ϕ1(x)⊤ϕ1(x′)
+
+k2(x,x′)=ϕ2(x)⊤ϕ2(x′)
+
+for any choices of (x,x′).
+
+1. Is k(x,x′)=k1(x,x′)+k2(x,x′) a valid kernel? If yes, construct ϕ(x) based on ϕ1(x) and ϕ2(x) such that k(x,x′)=ϕ(x)⊤ϕ(x′) for all choices of (x,x′). [5pts]
+
+2. Is k(x,x′)=k1(x,x′)⋅k2(x,x′) a valid kernel? If yes, construct ϕ(x) based on ϕ1(x) and ϕ2(x) such that k(x,x′)=ϕ(x)⊤ϕ(x′) for all choices of (x,x′). [5pts]
+
+SOLUTION
+
+1. Yes. Let ϕ(x)=[ϕ1(x),ϕ2(x)], i.e. concat the two vectors ϕ1(x) and ϕ2(x) into one column vector. Thus,
+
+ϕ(x)⊤ϕ(x′)=[ϕ1(x),ϕ2(x)]⊤[ϕ1(x′),ϕ2(x′)]=ϕ⊤1(x)ϕ1(x′)+ϕ⊤2(x)ϕ2(x′)=k1(x,x′)+k2(x,x′)=k(x,x′). Thus, k(x,x′) is a valid kernel, as demonstrated by the above construction of ϕ(x).
+
+2. Yes. Let M, N be the dimension of ϕ1(x) and ϕ2(x), respectively. Thus, we have
+
+k(x,x′)=k1(x,x′)⋅k2(x,x′)=(∑Mi=1[ϕ1(x)]i[ϕ1(x′)]i)⋅(∑Ni=1[ϕ2(x)]i[ϕ2(x′)]i)=∑Mi=1∑Nj=1([ϕ1(x)]i⋅[ϕ2(x)]j)⋅([ϕ1(x′)]i⋅[ϕ2(x′)]j)=ϕ(x)⋅ϕ(x′)
+
+where we choose ϕ(x)=[[ϕ1(x)]i[ϕ2(x)]j]ij or equivalently, ϕ(x)=vec(ϕ1(x)ϕ2(x)⊤)
+
+QUESTION 9 [10pt]
+
+Consider the following probabilistic model:
+
+yn=(w∘z)⊤xn where z=[z1,z2,…,zd] is a vector of d independent outcomes of a coin toss experiment with bias p∈(0,1). That is, zi=1 with probability p and zi=0 with probability 1−p. Here, w′=w∘z is the result of a Hadamard product where w′i=wi⋅zi.
+
+(1) Given a particular observation vector z and a dataset (X,y), derive the linear regression loss Lz(w). Here, X=[x1,x2,…,xN] denotes a (d by N) data matrix where each column is a d-dim input and y=[y1,y2,…,yn] is a column vector containing the corresponding training outputs. [5pts]
+
+(2) Compute the average loss Lp(w)=Ez[Lz(w)] over the possible values of z. [3pts]
+
+(3) Derive the optimal w. [2pts]
+
+Intuitively, the above is linear regression with dropout: for each training sample, each feature might be independently removed with a certain probability p. Using this exercise (specifically part (2)), we will understand how dropout translate into a regularizer.
+
+SOLUTION
+
+1. Using the formula in slide 41 of Linear Regression for w′, we know that
+
+Lz(w)=L(w′)=w′⊤(XX⊤)w′−2w′⊤Xy+y⊤y
+
+Thus, plugging in w′=w∘z, we obtain:
+
+Lz(w)=(w∘z)⊤(XX⊤)(w∘z)−2(w∘z)⊤Xy+y⊤y
+
+2. Let A=XX⊤. We note that
+
+(w∘z)⊤(XX⊤)(w∘z)=∑di=1∑dj=1wiwjzizjAij.
+
+Thus, E[(w∘z)⊤(XX⊤)(w∘z)]=∑di=1∑dj=1wiwjAijE[zizj]. (1)
+
+To compute E[zizj], we consider two cases:
+
+a. i=j, E[zizj]=E[z2i]=p since zi is a Bernoulli variable.
+
+b. i≠j, E[zizj]=E[zi]E[zj]=p2 since zi,zj are independent Bernoulli variables.
+
+As a result, ∑di=1∑dj=1wiwjAijE[zizj]=∑i,j:i≠jp2wiwjAij+∑di=1pw2iAii=p2∑di=1∑dj=1wiwjAij+(p−p2)∑iw2iAii.
+
+This can be re-written more succinctly as:
+
+∑di=1∑dj=1wiwjAijE[zizj]=p2⋅w⊤(XX⊤)w+(p−p2)⋅w⊤diag(XX⊤)w=w⊤(p2XX⊤+(p−p2)diag(XX⊤))w (2)
+
+Plugging (2) into (1), we obtain:
+
+E[(w∘z)⊤(XX⊤)(w∘z)]=w⊤(p2XX⊤+(p−p2)diag(XX⊤))w. (3)
+
+In addition, we also have:
+
+E[(w∘z)⊤Xy]=E[w∘z]⊤Xy=pw⊤Xy since E[wizi]=wiE[zi]=pwi. (4)
+
+Using (3) and (4), we obtain:
+
+Lp(w)=Ez[Lz(w)]=w⊤(p2XX⊤+(p−p2)diag(XX⊤))w−2pw⊤Xy+y⊤y.
+
+3. Last, treating p, X, and y as constants, we can compute the derivative
+
+dLp/dw=2(p2XX⊤+(p−p2)diag(XX⊤))w−2pXy.
+
+To find the optimal w, we set dLp/dw=0 and solve for w:
+
+2(p2XX⊤+(p−p2)diag(XX⊤))w−2pXy=0→w=(pXX⊤+(1−p)diag(XX⊤))−1(Xy). When p=1, we recover the optimal solution for the least square regression task without dropout.
+
+--
+
+Intuition. Note that we can re-arrange the result of part (2) above to obtain:
+
+Lp(w)∝∥X⊤(pw)−y∥2+(1/p−1)(pw)⊤diag(XX⊤)(pw) where we omit the (constant) quadratic term y⊤y.
+
+Optimizing the above is the same as optimizing for w¯¯¯¯=pw using the following loss
+
+L(w¯¯¯¯)=∥X⊤w¯¯¯¯−y∥2+(1/p−1)w¯¯¯¯⊤diag(XX⊤)w¯¯¯¯
+
+where the second term is the corresponding dropout regularizer. Once computed, we can recover w=p−1w¯¯¯¯ which corresponds to the empirical practice where we turn off the dropout during inference.
+
+QUESTION 10 [10pt]
+
+In this exercise, we will analyze the performance of ensemble in regression setting. Suppose y1(x),y2(x),…,ym(x) are m members of the ensemble committee. Let h(x) denote the (unknown) true function that we are approximating.
+
+The regression error incurred by the i-th member on input x is therefore: ϵi(x)2=(yi(x)−h(x))2.
+
+Suppose x is drawn randomly from a test distribution, the error rate of yi(x) is E[ϵi(x)2]. The averaged invidual error rate across the ensemble members is
+
+EAV=1M∑Mi=1E[ϵi(x)2].
+
+Now, let the ensemble prediction be y(x)=1M∑Mi=1yi(x). The ensemble loss is therefore:
+
+ECOM=E[(y(x)−h(x))2].
+
+1. Show that ECOM=E[(1M∑Mi=1ϵi(x))2]. (5pts)
+
+2. Suppose E[ϵi(x)]=0 and E[ϵi(x)ϵj(x)]=0 for i≠j. Show that ECOM≤(1/M)EAV. (5pts)
+
+SOLUTION
+
+1. Plugging the definition y(x)=1M∑Mi=1yi(x) into ECOM=E[(y(x)−h(x))2], we have
+
+ECOM=E[(y(x)−h(x))2]=ECOM=E[(1M∑Mi=1yi(x)−h(x))2]=E[(1M∑Mi=1yi(x)−1M∑Mi=1h(x))2]=E[(1M∑Mi=1(yi(x)−h(x)))2]=E[(1M∑Mi=1ϵi(x))2].
+
+2. Using the result of part 1,
+
+ECOM=1M2E[∑Mi=1∑Mj=1ϵi(x)ϵj(x)]=1M2∑Mi=1∑Mj=1E[ϵi(x)ϵj(x)]=1M2∑Mi=1E[ϵi(x)2] since for i≠j, E[ϵi(x)ϵj(x)]=0.
+
+As such, ECOM=1M⋅1ME[ϵi(x)2]=1MEAV.
+
+--
+
+Intuitively, this means if the ensemble components are incurring uncorrelated mistakes, the ensemble error rate is smaller than the averaged individual error rate by a factor of M. As M increases, the ensemble error rate will approach zero.

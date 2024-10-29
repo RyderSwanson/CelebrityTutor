@@ -1,0 +1,4 @@
+realtimetts[coqui]
+torch==2.2.2+cu118 
+torchaudio==2.2.2
+requests

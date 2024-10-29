@@ -104,7 +104,7 @@ def get_lecture():
     except KeyError:
         print("The message could not be found. Here is the response:\n")
         print(response)
-        exit()
+        message = "An internal error occurred."
 
     message = remove_markdown(message)
     return message
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     while again:
         message = get_lecture()
 
-        output_dir = f"history/{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}/"
+        output_dir = f"history/{datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}_{args.voice.rstrip(".wav")}/"
         os.makedirs(os.path.dirname(output_dir), exist_ok=True)
 
         # Save message to file
